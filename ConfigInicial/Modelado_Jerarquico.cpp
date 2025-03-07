@@ -1,7 +1,8 @@
-//Previo 5
+ï»¿//Practica 5
 //Morales Galicia Angel Uriel
-//29-02-2025
+//07-03-2025
 //319108745
+
 
 #include<iostream>
 #include <GL/glew.h>
@@ -14,7 +15,7 @@
 // Shaders
 #include "Shader.h"
 
-void Inputs(GLFWwindow *window);
+void Inputs(GLFWwindow* window);
 
 
 const GLint WIDTH = 1200, HEIGHT = 800;
@@ -31,7 +32,7 @@ float	hombro = 0.0f, codo = 0.0f, muneca = 0.0f, dedo1 = 0.0f, dedo2 = 0.0f, ded
 
 int main() {
 	glfwInit();
-	//Verificación de compatibilidad 
+	//Verificaciï¿½n de compatibilidad 
 	// Set all the required options for GLFW
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -40,13 +41,13 @@ int main() {
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Practica #5 Modelado jerarquico Morales Galicia Angel Uriel", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica #5 Modelado jerarquico Morales Galicia Angel Uriel", nullptr, nullptr);
 
 	int screenWidth, screenHeight;
 
 	glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
 
-	//Verificación de errores de creacion  ventana
+	//Verificaciï¿½n de errores de creacion  ventana
 	if (nullptr == window)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -58,7 +59,7 @@ int main() {
 	glfwMakeContextCurrent(window);
 	glewExperimental = GL_TRUE;
 
-	//Verificación de errores de inicialización de glew
+	//Verificaciï¿½n de errores de inicializaciï¿½n de glew
 
 	if (GLEW_OK != glewInit()) {
 		std::cout << "Failed to initialise GLEW" << std::endl;
@@ -86,49 +87,49 @@ int main() {
 	// use with Orthographic Projection
 
 
-	
+
 
 	// use with Perspective Projection
 	float vertices[] = {
-		-0.5f, -0.5f, 0.5f, 
-		0.5f, -0.5f, 0.5f,  
-		0.5f,  0.5f, 0.5f,  
-		0.5f,  0.5f, 0.5f,  
-		-0.5f,  0.5f, 0.5f, 
-		-0.5f, -0.5f, 0.5f, 
-		
-	    -0.5f, -0.5f,-0.5f, 
-		 0.5f, -0.5f,-0.5f, 
-		 0.5f,  0.5f,-0.5f, 
-		 0.5f,  0.5f,-0.5f, 
-	    -0.5f,  0.5f,-0.5f, 
-	    -0.5f, -0.5f,-0.5f, 
-		
+		-0.5f, -0.5f, 0.5f,
+		0.5f, -0.5f, 0.5f,
+		0.5f,  0.5f, 0.5f,
+		0.5f,  0.5f, 0.5f,
+		-0.5f,  0.5f, 0.5f,
+		-0.5f, -0.5f, 0.5f,
+
+		-0.5f, -0.5f,-0.5f,
+		 0.5f, -0.5f,-0.5f,
+		 0.5f,  0.5f,-0.5f,
+		 0.5f,  0.5f,-0.5f,
+		-0.5f,  0.5f,-0.5f,
+		-0.5f, -0.5f,-0.5f,
+
 		 0.5f, -0.5f,  0.5f,
 		 0.5f, -0.5f, -0.5f,
 		 0.5f,  0.5f, -0.5f,
 		 0.5f,  0.5f, -0.5f,
 		 0.5f,  0.5f,  0.5f,
 		 0.5f,  -0.5f, 0.5f,
-      
+
 		-0.5f,  0.5f,  0.5f,
 		-0.5f,  0.5f, -0.5f,
 		-0.5f, -0.5f, -0.5f,
 		-0.5f, -0.5f, -0.5f,
 		-0.5f, -0.5f,  0.5f,
 		-0.5f,  0.5f,  0.5f,
-		
+
 		-0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f, 
-		0.5f, -0.5f,  0.5f, 
-		0.5f, -0.5f,  0.5f, 
+		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f,  0.5f,
 		-0.5f, -0.5f,  0.5f,
 		-0.5f, -0.5f, -0.5f,
-		
+
 		-0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f, 
-		0.5f,  0.5f,  0.5f, 
-		0.5f,  0.5f,  0.5f, 
+		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,
 		-0.5f,  0.5f,  0.5f,
 		-0.5f,  0.5f, -0.5f,
 	};
@@ -147,27 +148,27 @@ int main() {
 	//2.- Copiamos nuestros arreglo de vertices en un buffer de vertices para que OpenGL lo use
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	
+
 
 	//Posicion
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3* sizeof(GLfloat), (GLvoid *)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
-	
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
 	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
 
-	
-	glm::mat4 projection=glm::mat4(1);
+
+	glm::mat4 projection = glm::mat4(1);
 
 	projection = glm::perspective(glm::radians(45.0f), (GLfloat)screenWidth / (GLfloat)screenHeight, 0.1f, 100.0f);//FOV, Radio de aspecto,znear,zfar
-	glm::vec3 color= glm::vec3(0.0f, 0.0f, 1.0f);
+	glm::vec3 color = glm::vec3(0.0f, 0.0f, 1.0f);
 	while (!glfwWindowShouldClose(window))
 	{
-		
+
 		Inputs(window);
 		// Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
@@ -175,22 +176,22 @@ int main() {
 		// Render
 		// Clear the colorbuffer
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-		
+
 		ourShader.Use();
-		glm::mat4 model=glm::mat4(1);
-		glm::mat4 view=glm::mat4(1);
+		glm::mat4 model = glm::mat4(1);
+		glm::mat4 view = glm::mat4(1);
 		glm::mat4 modelTemp = glm::mat4(1.0f); //Temp
 		glm::mat4 modelTemp2 = glm::mat4(1.0f); //Temp
 
 
 
 		//View set up 
-		view = glm::translate(view, glm::vec3(movX,movY, movZ));
+		view = glm::translate(view, glm::vec3(movX, movY, movZ));
 		view = glm::rotate(view, glm::radians(rot), glm::vec3(0.0f, 1.0f, 0.0f));
-		
+
 		GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
 		GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
 		GLint projecLoc = glGetUniformLocation(ourShader.Program, "projection");
@@ -200,10 +201,10 @@ int main() {
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-	
+
 
 		glBindVertexArray(VAO);
-		
+
 		//Model Bicep
 		model = glm::rotate(model, glm::radians(hombro), glm::vec3(0.0f, 0.0, 1.0f)); //hombro
 		modelTemp = model = glm::translate(model, glm::vec3(1.5f, 0.0f, 0.0f));
@@ -359,12 +360,12 @@ int main() {
 		model = glm::translate(model, glm::vec3(0.1f, 0.0f, 0.2f));
 		model = glm::rotate(model, glm::radians(dedo1 + 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 		model = glm::translate(model, glm::vec3(-0.1f, 0.0f, 0.2f));
-		modelTemp2 = model = glm::translate(model, glm::vec3(0.1f, 0.0f, 0.0f)); 
-		model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.4f)); 
+		modelTemp2 = model = glm::translate(model, glm::vec3(0.1f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.4f));
 		color = glm::vec3(0.0f, 1.0f, 1.0f);
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glDrawArrays(GL_TRIANGLES, 0, 36);//Ñ
+		glDrawArrays(GL_TRIANGLES, 0, 36);//ï¿½
 
 		//Model Dedo5 B
 		model = glm::translate(modelTemp2, glm::vec3(0.0f, 0.0f, 0.4f));
@@ -380,10 +381,10 @@ int main() {
 
 		glBindVertexArray(0);
 
-		
+
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
-	
+
 	}
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
@@ -391,7 +392,7 @@ int main() {
 
 	glfwTerminate();
 	return EXIT_SUCCESS;
- }
+}
 
 void Inputs(GLFWwindow* window) {
 
@@ -440,15 +441,15 @@ void Inputs(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
 		dedo1 = glm::clamp(dedo1 - angSpeed, -45.0f, 0.0f);
 
-	 if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
-		 dedo2 = glm::clamp(dedo2 + angSpeed, -45.0f, 0.0f);
-	 if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-		 dedo2 = glm::clamp(dedo2 - angSpeed, -45.0f, 0.0f);
+	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+		dedo2 = glm::clamp(dedo2 + angSpeed, -45.0f, 0.0f);
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+		dedo2 = glm::clamp(dedo2 - angSpeed, -45.0f, 0.0f);
 
-	 if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
-		 dedo3 = glm::clamp(dedo3 + angSpeed, -45.0f, 0.0f);
-	 if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-		 dedo3 = glm::clamp(dedo3 - angSpeed, -45.0f, 0.0f);
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+		dedo3 = glm::clamp(dedo3 + angSpeed, -45.0f, 0.0f);
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+		dedo3 = glm::clamp(dedo3 - angSpeed, -45.0f, 0.0f);
 }
 
 
