@@ -1,0 +1,14 @@
+# Blender 4.3.2 MTL File: 'chair.blend'
+# www.blender.org
+
+newmtl chair_mat.001
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Textura/chair_bcolor.png
+map_Ns Textura/chair_Roughness.png
+map_refl Textura/chair_Metallic.png
+map_Bump -bm 1.000000 Textura/chair_Normal.png

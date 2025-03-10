@@ -1,6 +1,6 @@
-//Previo 6
+//Practica 6
 //Morales Galicia Angel Uriel
-//07-03-2025
+//10-03-2025
 //319108745
  
 // Std. Includes
@@ -59,7 +59,7 @@ int main( )
     glfwWindowHint( GLFW_RESIZABLE, GL_FALSE );
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-    GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Previo #6 Carga de modelos y camara sintetica Morales Galicia Angel Uriel", nullptr, nullptr );
+    GLFWwindow *window = glfwCreateWindow( WIDTH, HEIGHT, "Practica #6 Carga de modelos y camara sintetica Morales Galicia Angel Uriel", nullptr, nullptr );
     
     if ( nullptr == window )
     {
@@ -99,7 +99,11 @@ int main( )
     Shader shader( "Shader/modelLoading.vs", "Shader/modelLoading.frag" );
     
     // Load models
+    Model house((char*)"Models/casa.obj");
     Model dog((char*)"Models/RedDog.obj");
+    Model bote((char*)"Models/bote.obj");
+    Model farol((char*)"Models/farol.obj");
+    Model silla((char*)"Models/chair.obj");
     glm::mat4 projection = glm::perspective( camera.GetZoom( ), ( float )SCREEN_WIDTH/( float )SCREEN_HEIGHT, 0.1f, 100.0f );
   
 
@@ -128,14 +132,27 @@ int main( )
         // Draw the loaded model
         glm::mat4 model(1);
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        dog.Draw(shader);
+        house.Draw(shader);
 
-
-        model = glm::translate(model, glm::vec3(3.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+        model = glm::translate(model, glm::vec3(2.2f, 0.2f, 0.0f));
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         dog.Draw(shader);
 
+        model = glm::translate(model, glm::vec3(2.2f, -0.5f, 3.0f));
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        bote.Draw(shader);
+
+        model = glm::translate(model, glm::vec3(-2.5f, 0.2f, -2.0f));
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        farol.Draw(shader);
+
+        model = glm::translate(model, glm::vec3(-0.5f, 0.0f, -0.5f));
+        model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        silla.Draw(shader);
 
         // Swap the buffers
         glfwSwapBuffers( window );

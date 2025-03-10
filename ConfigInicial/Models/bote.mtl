@@ -1,0 +1,34 @@
+# Blender 4.3.2 MTL File: 'Wooden Rowboat.blend'
+# www.blender.org
+
+newmtl Metal
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd Textura/metal_BaseColor.png
+map_Pm Textura/metal_Metallic.png
+map_Pr Textura/metal_Roughness.png
+map_Bump -bm 1.000000 Textura/metal_Normal.png
+
+newmtl Wood
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd Textura/wood_BaseColor.png
+map_Pm Textura/wood_Metallic.png
+map_Pr Textura/wood_Roughness.png
+map_Bump -bm 1.000000 Textura/wood_Normal.png
