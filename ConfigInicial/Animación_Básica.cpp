@@ -1,4 +1,4 @@
-//Previo 10
+//Practica 10
 //Morales Galicia Angel Uriel
 //04-04-2025
 //319108745
@@ -105,11 +105,15 @@ float vertices[] = {
 
 glm::vec3 Light1 = glm::vec3(0);
 //Anim
+
+float rotDog = 0;
 float rotBall = 0;
-float upBall = 0;
-bool goingUp = true;
+
+float jumpProgress = 0.0f;
+float tiltDog = 0.0f;
+float transDogY = 0.0f;
+float transBallY = 0.0f;
 bool AnimBall = false;
-bool AnimBallUp = false;
 
 
 // Deltatime
@@ -120,15 +124,8 @@ int main()
 {
 	// Init GLFW
 	glfwInit();
-	// Set all the required options for GLFW
-	/*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);*/
 
-	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Previo #10 Animacion basica Morales Galicia Angel Uriel", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica #10 Animacion basica Morales Galicia Angel Uriel", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -215,10 +212,6 @@ int main()
 		// OpenGL options
 		glEnable(GL_DEPTH_TEST);
 
-		
-		
-		
-	
 
 		// Use cooresponding shader when setting uniforms/drawing objects
 		lightingShader.Use();
@@ -285,8 +278,6 @@ int main()
 
 		glm::mat4 model(1);
 
-	
-		
 		//Carga de modelo 
         view = camera.GetViewMatrix();	
 		model = glm::mat4(1);
@@ -294,6 +285,10 @@ int main()
 		Piso.Draw(lightingShader);
 
 		model = glm::mat4(1);
+		model = glm::rotate(model, glm::radians(rotDog), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, tiltDog, glm::vec3(1.0f, 0.0f, 0.0f)); // inclinación hacia adelante o atrás
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, transDogY, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 0);
 		Dog.Draw(lightingShader);
@@ -304,7 +299,9 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
 		model = glm::rotate(model, glm::radians(rotBall), glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::translate(model, glm::vec3(0.0f, upBall, 0.0f));		
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, transBallY, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	    Ball.Draw(lightingShader); 
 		glDisable(GL_BLEND);  //Desactiva el canal alfa 
@@ -450,34 +447,30 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 		AnimBall = !AnimBall;
 		
 	}
-	if (keys[GLFW_KEY_M])
-	{
-		AnimBallUp = !AnimBallUp;
-
-	}
 }
 void Animation() {
 	if (AnimBall)
 	{
-		rotBall += 0.2f;
-		//printf("%f", rotBall);
-	}
-	else
-	{
-		//rotBall = 0.0f;
-	}
+		rotBall += 0.1f;
+		rotDog -= 0.1f;
+		jumpProgress += 0.1f; 
 
-	if (AnimBallUp)
-	{
-		if (goingUp) {
-			upBall += 0.005f;
-			if (upBall >= 2.0f)  // Altura máxima
-				goingUp = false;
+		float mod180 = fmod(jumpProgress, 180.0f);
+		if (mod180 >= 160.0f || mod180 <= 20.0f)
+		{
+			float angleAround180 = mod180 <= 20.0f ? mod180 + 20.0f : mod180 - 160.0f;
+			float t = angleAround180 / 40.0f;
+			float tilt = sin((angleAround180 / 40.0f) * glm::pi<float>());
+			tiltDog = -glm::radians(20.0f) * tilt;	
+
+			transDogY = sin(t * glm::pi<float>()) * 0.5f;
+			transBallY = -sin(t * glm::pi<float>()) * 0.5f;
 		}
-		else {
-			upBall -= 0.005f;
-			if (upBall <= 0.0f)  // Altura mínima
-				goingUp = true;
+		else
+		{
+			tiltDog = 0.0f;
+			transDogY = 0.0f;
+			transBallY = 0.0f;
 		}
 	}
 	else
