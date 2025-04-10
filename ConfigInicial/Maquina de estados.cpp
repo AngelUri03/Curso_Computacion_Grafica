@@ -1,6 +1,6 @@
-//Practica 10
+//Previo 11
 //Morales Galicia Angel Uriel
-//04-04-2025
+//20-04-2025
 //319108745
 
 #include <iostream>
@@ -105,15 +105,19 @@ float vertices[] = {
 
 glm::vec3 Light1 = glm::vec3(0);
 //Anim
-
-float rotDog = 0;
-float rotBall = 0;
-
-float jumpProgress = 0.0f;
-float tiltDog = 0.0f;
-float transDogY = 0.0f;
-float transBallY = 0.0f;
+float rotBall = 0.0f;
 bool AnimBall = false;
+bool AnimDog = false;
+float rotDog = 0.0f;
+int dogAnim = 0;
+float FLegs = 0.0f;
+float RLegs = 0.0f;
+float head = 0.0f;
+float tail = 0.0f;
+glm::vec3 dogPos (0.0f,0.0f,0.0f);
+float dogRot = 0.0f;
+bool step = false;
+
 
 
 // Deltatime
@@ -124,8 +128,15 @@ int main()
 {
 	// Init GLFW
 	glfwInit();
+	// Set all the required options for GLFW
+	/*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);*/
 
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica #10 Animacion basica Morales Galicia Angel Uriel", nullptr, nullptr);
+	// Create a GLFWwindow object that we can use for GLFW's functions
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Previo #11 Animacion maquina de estados Morales Galicia Angel Uriel", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -164,7 +175,13 @@ int main()
 	Shader lampShader("Shader/lamp.vs", "Shader/lamp.frag");
 	
 	//models
-	Model Dog((char*)"Models/RedDog.obj");
+	Model DogBody((char*)"Models/DogBody.obj");
+	Model HeadDog((char*)"Models/HeadDog.obj");
+	Model DogTail((char*)"Models/TailDog.obj");
+	Model F_RightLeg((char*)"Models/F_RightLegDog.obj");
+	Model F_LeftLeg((char*)"Models/F_LeftLegDog.obj");
+	Model B_RightLeg((char*)"Models/B_RightLegDog.obj");
+	Model B_LeftLeg((char*)"Models/B_LeftLegDog.obj");
 	Model Piso((char*)"Models/piso.obj");
 	Model Ball((char*)"Models/ball.obj");
 
@@ -212,6 +229,10 @@ int main()
 		// OpenGL options
 		glEnable(GL_DEPTH_TEST);
 
+		
+		glm::mat4 modelTemp = glm::mat4(1.0f); //Temp
+		
+	
 
 		// Use cooresponding shader when setting uniforms/drawing objects
 		lightingShader.Use();
@@ -278,6 +299,8 @@ int main()
 
 		glm::mat4 model(1);
 
+	
+		
 		//Carga de modelo 
         view = camera.GetViewMatrix();	
 		model = glm::mat4(1);
@@ -285,13 +308,50 @@ int main()
 		Piso.Draw(lightingShader);
 
 		model = glm::mat4(1);
-		model = glm::rotate(model, glm::radians(rotDog), glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, tiltDog, glm::vec3(1.0f, 0.0f, 0.0f)); // inclinación hacia adelante o atrás
-		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-		model = glm::translate(model, glm::vec3(0.0f, transDogY, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 0);
-		Dog.Draw(lightingShader);
+		//Body
+		modelTemp= model = glm::translate(model, dogPos);
+		modelTemp= model = glm::rotate(model, glm::radians(dogRot), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		DogBody.Draw(lightingShader);
+		//Head
+		model = modelTemp;
+		model = glm::translate(model, glm::vec3(0.0f, 0.093f, 0.208f));
+		model = glm::rotate(model, glm::radians(head), glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		HeadDog.Draw(lightingShader);
+		//Tail 
+		model = modelTemp;
+		model = glm::translate(model, glm::vec3(0.0f, 0.026f, -0.288f));
+		model = glm::rotate(model, glm::radians(tail), glm::vec3(0.0f, 0.0f, -1.0f)); 
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); 
+		DogTail.Draw(lightingShader);
+		//Front Left Leg
+		model = modelTemp;
+		model = glm::translate(model, glm::vec3(0.112f, -0.044f, 0.074f));
+		model = glm::rotate(model, glm::radians(FLegs), glm::vec3(-1.0f, 0.0f, 0.0f)); 
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		F_LeftLeg.Draw(lightingShader);
+		//Front Right Leg
+		model = modelTemp; 
+		model = glm::translate(model, glm::vec3(-0.111f, -0.055f, 0.074f));
+		model = glm::rotate(model, glm::radians(FLegs), glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		F_RightLeg.Draw(lightingShader);
+		//Back Left Leg
+		model = modelTemp; 
+		model = glm::translate(model, glm::vec3(0.082f, -0.046, -0.218)); 
+		model = glm::rotate(model, glm::radians(RLegs), glm::vec3(1.0f, 0.0f, 0.0f)); 
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); 
+		B_LeftLeg.Draw(lightingShader);
+		//Back Right Leg
+		model = modelTemp; 
+		model = glm::translate(model, glm::vec3(-0.083f, -0.057f, -0.231f));
+		model = glm::rotate(model, glm::radians(RLegs), glm::vec3(-1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		B_RightLeg.Draw(lightingShader); 
+
 
 		model = glm::mat4(1);
 		glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
@@ -299,9 +359,6 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
 		model = glm::rotate(model, glm::radians(rotBall), glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::translate(model, glm::vec3(0.0f, transBallY, 0.0f));
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	    Ball.Draw(lightingShader); 
 		glDisable(GL_BLEND);  //Desactiva el canal alfa 
@@ -434,12 +491,12 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 		active = !active;
 		if (active)
 		{
-			Light1 = glm::vec3(1.0f, 1.0f, 0.0f);
+			Light1 = glm::vec3(0.2f, 0.8f, 1.0f);
 			
 		}
 		else
 		{
-			Light1 = glm::vec3(0);
+			Light1 = glm::vec3(0);//Cuado es solo un valor en los 3 vectores pueden dejar solo una componente
 		}
 	}
 	if (keys[GLFW_KEY_N])
@@ -447,36 +504,55 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 		AnimBall = !AnimBall;
 		
 	}
+	if (keys[GLFW_KEY_B])
+	{
+		dogAnim = 1;
+
+	}
+	
 }
 void Animation() {
 	if (AnimBall)
 	{
-		rotBall += 0.1f;
-		rotDog -= 0.1f;
-		jumpProgress += 0.1f; 
-
-		float mod180 = fmod(jumpProgress, 180.0f);
-		if (mod180 >= 160.0f || mod180 <= 20.0f)
-		{
-			float angleAround180 = mod180 <= 20.0f ? mod180 + 20.0f : mod180 - 160.0f;
-			float t = angleAround180 / 40.0f;
-			float tilt = sin((angleAround180 / 40.0f) * glm::pi<float>());
-			tiltDog = -glm::radians(20.0f) * tilt;	
-
-			transDogY = sin(t * glm::pi<float>()) * 0.5f;
-			transBallY = -sin(t * glm::pi<float>()) * 0.5f;
-		}
-		else
-		{
-			tiltDog = 0.0f;
-			transDogY = 0.0f;
-			transBallY = 0.0f;
-		}
+		rotBall += 0.4f;
+		//printf("%f", rotBall);
 	}
-	else
+	
+	if (AnimDog)
 	{
-		//rotBall = 0.0f;
+		rotDog -= 0.6f;
+		//printf("%f", rotBall);
 	}
+	
+	if (dogAnim == 1) {
+
+		if (!step) {
+			RLegs += 0.05f;
+			FLegs += 0.05f;
+			head += 0.05f;
+			tail += 0.05f;
+			if (RLegs > 15.0f) {
+				step = true;
+			}
+		}
+		else {
+			RLegs -= 0.05f;
+			FLegs -= 0.05f;
+			head -= 0.05f;
+			tail -= 0.05f;
+			if (RLegs < -15.0f) {
+				step = false;
+			}
+		}
+
+		dogPos.z += 0.0005;
+
+		if (dogPos.z >= 2.3f) {
+			dogAnim = 0;
+		}
+		
+	}
+	
 }
 
 void MouseCallback(GLFWwindow *window, double xPos, double yPos)
