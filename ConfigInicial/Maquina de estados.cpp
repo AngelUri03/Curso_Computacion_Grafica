@@ -1,6 +1,6 @@
-//Previo 11
+//Practica 11
 //Morales Galicia Angel Uriel
-//20-04-2025
+//21-04-2025
 //319108745
 
 #include <iostream>
@@ -136,7 +136,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);*/
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Previo #11 Animacion maquina de estados Morales Galicia Angel Uriel", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica #11 Animacion maquina de estados Morales Galicia Angel Uriel", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -496,7 +496,7 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 		}
 		else
 		{
-			Light1 = glm::vec3(0);//Cuado es solo un valor en los 3 vectores pueden dejar solo una componente
+			Light1 = glm::vec3(0);
 		}
 	}
 	if (keys[GLFW_KEY_N])
@@ -527,32 +527,149 @@ void Animation() {
 	if (dogAnim == 1) {
 
 		if (!step) {
-			RLegs += 0.05f;
-			FLegs += 0.05f;
-			head += 0.05f;
-			tail += 0.05f;
+			RLegs += 0.08f;
+			FLegs += 0.08f;
+			head += 0.08f;
+			tail += 0.08f;
 			if (RLegs > 15.0f) {
 				step = true;
 			}
 		}
 		else {
-			RLegs -= 0.05f;
-			FLegs -= 0.05f;
-			head -= 0.05f;
-			tail -= 0.05f;
+			RLegs -= 0.08f;
+			FLegs -= 0.08f;
+			head -= 0.08f;
+			tail -= 0.08f;
 			if (RLegs < -15.0f) {
 				step = false;
 			}
 		}
 
-		dogPos.z += 0.0005;
+		dogPos.z += 0.0008;
 
-		if (dogPos.z >= 2.3f) {
-			dogAnim = 0;
+		if (dogPos.z >= 2.2f) {
+			dogAnim = 2;
 		}
 		
 	}
-	
+
+	if (dogAnim == 2) {
+		dogRot += 0.08f;
+		if (dogRot >= 90.0f) {
+			dogAnim = 3;
+		}
+	}
+
+	if (dogAnim == 3) {
+
+		if (!step) {
+			RLegs += 0.08f;
+			FLegs += 0.08f;
+			head += 0.08f;
+			tail += 0.08f;
+			if (RLegs > 15.0f) {
+				step = true;
+			}
+		}
+		else {
+			RLegs -= 0.08f;
+			FLegs -= 0.08f;
+			head -= 0.08f;
+			tail -= 0.08f;
+			if (RLegs < -15.0f) {
+				step = false;
+			}
+		}
+
+		dogPos.x += 0.0008;
+
+		if (dogPos.x >= 2.2f) {
+			dogAnim = 4;
+		}
+
+	}
+
+	if (dogAnim == 4) {
+		dogRot += 0.08f;
+		if (dogRot >= 180.0f) {
+			dogAnim = 5;
+		}
+	}
+
+	if (dogAnim == 5) {
+
+		if (!step) {
+			RLegs += 0.08f;
+			FLegs += 0.08f;
+			head += 0.08f;
+			tail += 0.08f;
+			if (RLegs > 15.0f) {
+				step = true;
+			}
+		}
+		else {
+			RLegs -= 0.08f;
+			FLegs -= 0.08f;
+			head -= 0.08f;
+			tail -= 0.08f;
+			if (RLegs < -15.0f) {
+				step = false;
+			}
+		}
+
+		dogPos.z -= 0.0008;
+
+		if (dogPos.z <= -2.2f) {
+			dogAnim = 6;
+		}
+
+	}
+
+	if (dogAnim == 6) {
+		dogRot += 0.08f;
+		if (dogRot >= 315.0f) {
+			dogAnim = 7;
+		}
+	}
+
+	if (dogAnim == 7) {
+
+		if (!step) {
+			RLegs += 0.08f;
+			FLegs += 0.08f;
+			head += 0.08f;
+			tail += 0.08f;
+			if (RLegs > 15.0f) {
+				step = true;
+			}
+		}
+		else {
+			RLegs -= 0.08f;
+			FLegs -= 0.08f;
+			head -= 0.08f;
+			tail -= 0.08f;
+			if (RLegs < -15.0f) {
+				step = false;
+			}
+		}
+
+		dogPos.z += 0.0008;
+		dogPos.x -= 0.0008;
+
+		if (dogPos.z >= 0) {
+			dogAnim = 8;
+		}
+
+	}
+
+	if (dogAnim == 8) {
+		dogRot += 0.08f;
+		if (dogRot >= 360.0f) {
+			dogAnim = 0;
+			dogRot = 0.0f;
+		}
+	}
+
 }
 
 void MouseCallback(GLFWwindow *window, double xPos, double yPos)
